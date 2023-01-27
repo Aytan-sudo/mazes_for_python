@@ -1,5 +1,7 @@
 import random
 
+
+
 def binary_tree(Grid):
     for cell in Grid.cells:
         neighbors = []
@@ -45,5 +47,5 @@ def hunt_and_kill(Grid):
                    break 
 
 
-
+creation_algorithms = {"bt":binary_tree, "ab":aldous_broder, "hk":hunt_and_kill}
         
