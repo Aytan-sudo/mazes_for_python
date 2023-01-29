@@ -1,7 +1,7 @@
 from PIL import Image, ImageDraw
 from time import localtime, strftime
 
-def draw_PNG(Grid, cell_size:int = 30, bg_color = (255,255,255), wall_color = (0,0,0)):  
+def draw_PNG(Grid, cell_size:int = 30, bg_color = (255,255,255), wall_color = (0,0,0), distance:bool = False):  
     """
     Using the PIL module and on an object of class Grid, 
     this function allows to draw the maze in PNG. 
@@ -12,11 +12,12 @@ def draw_PNG(Grid, cell_size:int = 30, bg_color = (255,255,255), wall_color = (0
     
     image_width = cell_size * Grid.col
     image_height = cell_size * Grid.lines
+    border = 20
 
-    image = Image.new("RGBA", (image_width + 20, image_height + 20), (255,255,255))
+    image = Image.new("RGBA", (image_width + border, image_height + border), (255,255,255))
     draw = ImageDraw.Draw(image)
 
-    for i in range(2):
+    for i in range(1):
         for cell in Grid.cells:
             x1 = 10 + cell.x * cell_size
             y1 = 10 + cell.y * cell_size
@@ -25,6 +26,7 @@ def draw_PNG(Grid, cell_size:int = 30, bg_color = (255,255,255), wall_color = (0
 
             if i == 0: #First pass to draw a wall rectangle for each cell
                 draw.rectangle([(x1, y1), (x2, y2)], outline=wall_color, fill = bg_color, width=1)
+                draw.text(((x1 + x2)/2,(y1 + y2)/2), cell.content, fill = wall_color, anchor = "ms")
             else: #Second pass (because range = 0 or 1) to replace black wall by white when open
                 if cell.north_cell is not None and cell.north_cell.coord in cell.links:
                     draw.line([(x1+1,y1),(x2-1,y1)], fill=bg_color, width=1)
@@ -34,8 +36,17 @@ def draw_PNG(Grid, cell_size:int = 30, bg_color = (255,255,255), wall_color = (0
                     draw.line([(x2,y1+1),(x2,y2-1)], fill=bg_color, width=1)
                 if cell.west_cell is not None and cell.west_cell.coord in cell.links:        
                     draw.line([(x1,y1+1),(x1,y2-1)], fill=bg_color, width=1)
-    #draw.text((10,image_height+15), f"Labyrinthe produit avec l'algorithme {Grid.algo}", fill = wall_color, anchor = "ma")
+    
+        
+            
 
     filename = strftime("%Y_%m_%d_%H_%M_%S", localtime())
     image.save("{}.png".format(filename), "PNG", optimize=True)
 
+    #start = (10+cell_size/2 + Grid.start.x*cell_size, 10+cell_size/2 + Grid.start.y*cell_size)
+    #escape = (10+cell_size/2 + Grid.escape.x*cell_size, 10+cell_size/2 + Grid.escape.y*cell_size)
+    #draw.text(start, "S", fill = wall_color, anchor = "mm")
+    #draw.text(escape, "E", fill = wall_color, anchor = "mm")
+
+    #filename = strftime("%Y_%m_%d_%H_%M_%S", localtime())
+    #image.save("{}_solution.png".format(filename), "PNG", optimize=True)

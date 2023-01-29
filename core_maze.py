@@ -15,6 +15,7 @@ class Cell: #A maze is made up of cells
         self.east_cell = None
         self.west_cell = None
         self.neighbors = []
+        self.content = " "
 
     #def __repr__(self):
         #return str(self.coord)
@@ -82,14 +83,22 @@ class Grid:
                         i.east_cell = ii
             i.neighbors_create()
         
+        self.start = self.select_cell_by_coord((1,1))
+        self.start.content = "S"
+        self.escape = self.select_cell_by_coord((self.col-1,self.lines-1))
+        self.escape.content = "E"
+
         algo_maze.creation_algorithms[algo](self) #Apply the function based on the name in the dict
     
     def select_cell_by_coord(self, coord):
         for cell in self.cells:
             if coord == cell.coord:
                 return cell
+
+    def random_cell(self):
+        random_cell = choice(self.Cells)
+        return random_cell
                 
-    
     def create_png(self):
         print_maze.draw_PNG(self)
         
@@ -129,3 +138,4 @@ if __name__ == "__main__":
     
     test = Grid(algo = "hk")
     test.create_png()
+  
