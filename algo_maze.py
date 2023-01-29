@@ -3,6 +3,10 @@ import random
 
 
 def binary_tree(Grid):
+    """ 
+    Fast, efficient, and simple
+    Strongly biased toward diagonals (here NE)
+    """
     for cell in Grid.cells:
         neighbors = []
         if cell.north_cell is not None:
@@ -16,6 +20,10 @@ def binary_tree(Grid):
 
 
 def aldous_broder(Grid):
+    """
+    Perfect randomly maze
+    Long to finish in big mazes ++
+    """
     actual_cell = random.choice(Grid.cells)
     not_yet_visited = len(Grid.cells)-1
 
@@ -28,6 +36,10 @@ def aldous_broder(Grid):
         actual_cell = neighbor
 
 def hunt_and_kill(Grid):
+    """
+    Few dead-ends, long rivers
+    Low memory, but slow
+    """
     actual_cell = random.choice(Grid.cells)
 
     while actual_cell is not None:
@@ -47,5 +59,11 @@ def hunt_and_kill(Grid):
                    break 
 
 
-creation_algorithms = {"bt":binary_tree, "ab":aldous_broder, "hk":hunt_and_kill}
+
+# Dict containing the list of algorithms 
+creation_algorithms = {
+    "bt":binary_tree, 
+    "ab":aldous_broder, 
+    "hk":hunt_and_kill,
+    }
         

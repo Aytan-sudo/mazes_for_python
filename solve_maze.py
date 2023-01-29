@@ -1,6 +1,6 @@
 
 #ToDO : Implement:
     # Entrance / Exit / Treasures / Monsters
-    # Djkistra algoritm
+    # Dijkstra algoritm
     # Colors
     # Bot who travel (+visualisations)

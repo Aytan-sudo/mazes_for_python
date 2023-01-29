@@ -3,7 +3,7 @@ import algo_maze
 import print_maze
 from time import gmtime, strftime
 
-class Cell:
+class Cell: #A maze is made up of cells
 
     def __init__(self, x:int, y:int):
         self.coord = (x,y)
@@ -16,14 +16,14 @@ class Cell:
         self.west_cell = None
         self.neighbors = []
 
-    def __repr__(self):
-        return str(self.coord)
+    #def __repr__(self):
+        #return str(self.coord)
 
-    def dig(self, cell):
+    def dig(self, cell): #Link two Cells
         self.links.append(cell.coord)
         cell.links.append(self.coord)
 
-    def neighbors_create(self):
+    def neighbors_create(self): #Define list of neighbours for use in some algorithms
         if self.north_cell is not None:
             self.neighbors.append(self.north_cell)
         if self.south_cell is not None:
@@ -32,6 +32,24 @@ class Cell:
             self.neighbors.append(self.east_cell)
         if self.west_cell is not None:
             self.neighbors.append(self.west_cell)
+     
+    def distances(self):
+        distances = Distances(self)
+        frontier = [self]
+
+        while len(frontier) > 0:
+            new_frontier = []
+
+            for cell in frontier:
+                for linked in cell.links():
+                    if distances[linked]:
+                        continue
+                    distances[linked] = distances[cell] + 1
+                    new_frontier.append(linked)
+
+            frontier = new_frontier
+
+        return distances
         
 
 class Grid:
@@ -64,26 +82,50 @@ class Grid:
                         i.east_cell = ii
             i.neighbors_create()
         
-        algo_maze.creation_algorithms[algo](self)
+        algo_maze.creation_algorithms[algo](self) #Apply the function based on the name in the dict
+    
+    def select_cell_by_coord(self, coord):
+        for cell in self.cells:
+            if coord == cell.coord:
+                return cell
+                
     
     def create_png(self):
         print_maze.draw_PNG(self)
+        
+class Distances:
+    def __init__(self, root:Cell):
+        self._root = root
+        self._cells = {}
+        self._cells[self._root] = 0
 
+    def __getitem__(self, cell:Cell):
+        return self._cells[cell]
+
+    def __setitem__(self, cell:Cell, distance):
+        self._cells[cell] = distance
+
+    def cells(self):
+        return list(self._cells.keys())
+
+    def path_to(self, goal):
+        current = goal
+
+        breadcrumbs = Distances(self.root)
+        breadcrumbs[current] = self.cells[current]
+
+        while current != self.root:
+            for neighbor in current.links:
+                if self.cells[neighbor] < self.cells[current]:
+                    breadcrumbs[neighbor] = self.cells[neighbor]
+                    current = neighbor
+                    break
+        return breadcrumbs
+
+        
+        
 if __name__ == "__main__":
-    #Test processing
-    test = Grid(algo = "bt")
-    #test.create()
-    test.create_png()
-    #test.cells[4].dig(test.cells[4].west_cell)
-    #test.cells[27].dig(test.cells[27].south_cell)
-    #test.cells[52].dig(test.cells[52].east_cell)
-    #test.cells[33].dig(test.cells[33].west_cell)
-    #test.create_PNG()
-    #for i in test.cells:
-        #print(f'La cellule {i} a comme coordonnées Nord {i.north_cell}, Sud {i.south_cell}, Ouest {i.west_cell} et Est {i.east_cell}') 
+    #Tests processing
     
-    #result = [i.coord for i in test.cells if i.coord == (2,3)]
-    #print(result[0])
-
-
-    #print(test.map)
+    test = Grid(algo = "hk")
+    test.create_png()
