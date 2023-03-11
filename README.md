@@ -22,6 +22,7 @@ There is theoretically no limit to the size of the labyrinth. But the algorithms
 
 Mazes in python is freely inspired by the book "Mazes for programmers", which offers code in Ruby. It is completely recoded in python.
 
+
 Future Projects (not yet implemented):
 - Add Djkistra algorithm to compute the shortest path between 2 points
 - Add the A-star algorithm to calculate the shortest path between 2 points
