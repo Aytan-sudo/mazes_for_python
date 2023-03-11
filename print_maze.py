@@ -1,7 +1,7 @@
 from PIL import Image, ImageDraw
 from time import localtime, strftime
 
-def draw_PNG(Grid, cell_size:int = 30, bg_color = (255,255,255), wall_color = (0,0,0), distance:bool = False):  
+def draw_PNG(Grid, cell_size:int = 20, bg_color = (255,255,255), wall_color = (0,0,0), distance:bool = False):  
     """
     Using the PIL module and on an object of class Grid, 
     this function allows to draw the maze in PNG. 
@@ -17,7 +17,7 @@ def draw_PNG(Grid, cell_size:int = 30, bg_color = (255,255,255), wall_color = (0
     image = Image.new("RGBA", (image_width + border, image_height + border), (255,255,255))
     draw = ImageDraw.Draw(image)
 
-    for i in range(1):
+    for i in range(2):
         for cell in Grid.cells:
             x1 = 10 + cell.x * cell_size
             y1 = 10 + cell.y * cell_size
@@ -43,10 +43,4 @@ def draw_PNG(Grid, cell_size:int = 30, bg_color = (255,255,255), wall_color = (0
     filename = strftime("%Y_%m_%d_%H_%M_%S", localtime())
     image.save("{}.png".format(filename), "PNG", optimize=True)
 
-    #start = (10+cell_size/2 + Grid.start.x*cell_size, 10+cell_size/2 + Grid.start.y*cell_size)
-    #escape = (10+cell_size/2 + Grid.escape.x*cell_size, 10+cell_size/2 + Grid.escape.y*cell_size)
-    #draw.text(start, "S", fill = wall_color, anchor = "mm")
-    #draw.text(escape, "E", fill = wall_color, anchor = "mm")
 
-    #filename = strftime("%Y_%m_%d_%H_%M_%S", localtime())
-    #image.save("{}_solution.png".format(filename), "PNG", optimize=True)

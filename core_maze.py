@@ -3,6 +3,9 @@ import algo_maze
 import print_maze
 from time import gmtime, strftime
 
+'''Only the generation of maze in png work at that time'''
+
+
 class Cell: #A maze is made up of cells
 
     def __init__(self, x:int, y:int):
@@ -34,15 +37,15 @@ class Cell: #A maze is made up of cells
         if self.west_cell is not None:
             self.neighbors.append(self.west_cell)
      
-    def distances(self):
+    def distances(self): #Not yet validated
         distances = Distances(self)
         frontier = [self]
 
-        while len(frontier) > 0:
+        while frontier:
             new_frontier = []
 
             for cell in frontier:
-                for linked in cell.links():
+                for linked in cell.links:
                     if distances[linked]:
                         continue
                     distances[linked] = distances[cell] + 1
@@ -82,14 +85,9 @@ class Grid:
                     if ii.coord == (i.x+1,i.y):
                         i.east_cell = ii
             i.neighbors_create()
-        
-        self.start = self.select_cell_by_coord((1,1))
-        self.start.content = "S"
-        self.escape = self.select_cell_by_coord((self.col-1,self.lines-1))
-        self.escape.content = "E"
 
         algo_maze.creation_algorithms[algo](self) #Apply the function based on the name in the dict
-    
+ 
     def select_cell_by_coord(self, coord):
         for cell in self.cells:
             if coord == cell.coord:
@@ -102,16 +100,18 @@ class Grid:
     def create_png(self):
         print_maze.draw_PNG(self)
         
-class Distances:
+class Distances: #not yet validated
     def __init__(self, root:Cell):
         self._root = root
-        self._cells = {}
-        self._cells[self._root] = 0
+        self._cells = dict()
+        self._cells[root] = 0
 
     def __getitem__(self, cell:Cell):
-        return self._cells[cell]
+        if cell in self._cells.keys():
+            return self._cells[cell]
+        return None
 
-    def __setitem__(self, cell:Cell, distance):
+    def __setitem__(self, cell:Cell, distance:int):
         self._cells[cell] = distance
 
     def cells(self):
@@ -136,6 +136,6 @@ class Distances:
 if __name__ == "__main__":
     #Tests processing
     
-    test = Grid(algo = "hk")
+    test = Grid(algo="ab")
     test.create_png()
   

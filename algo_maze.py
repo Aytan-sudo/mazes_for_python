@@ -28,7 +28,7 @@ def aldous_broder(Grid):
     not_yet_visited = len(Grid.cells)-1
 
     while not_yet_visited > 0:
-        neighbors = actual_cell.neighbors()
+        neighbors = actual_cell.neighbors
         neighbor = random.choice(neighbors)
         if not neighbor.links: #If list is not empty (empty = False)
             actual_cell.dig(neighbor)
